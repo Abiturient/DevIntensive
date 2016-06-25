@@ -18,5 +18,10 @@
     <color name="orange">#FF9D2F</color>
     <color name="red">#FF432F</color>
 
+    <!-- devider -->
+    <color name="grey">#5d5d5d</color>
+    <color name="grey_light">#9c9c9c</color>
+
+    <color name="black_hint">#000000</color>
 
 </resources>
