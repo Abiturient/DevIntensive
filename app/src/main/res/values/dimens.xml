@@ -6,8 +6,8 @@
 
     <!-- sizes -->
     <dimen name="size_small_24">24dp</dimen>
-    <dimen name="size_small_56">56dp</dimen>
-    <dimen name="size_small_72">72dp</dimen>
+    <dimen name="size_medium_56">56dp</dimen>
+    <dimen name="size_big_72">72dp</dimen>
 
     <!-- font sizes-->
     <dimen name="font_small_12">12sp</dimen>
@@ -20,8 +20,9 @@
     <dimen name="spacing_small_8">8dp</dimen>
     <dimen name="spacing_small_10">10dp</dimen>
     <dimen name="spacing_normal_14">14dp</dimen>
-    <dimen name="spacing_medial_16">16dp</dimen>
-    <dimen name="spacing_large_24">24dp</dimen>
+    <dimen name="spacing_normal_16">16dp</dimen>
+    <dimen name="spacing_medium_32">32dp</dimen>
+    <dimen name="spacing_medial_24">24dp</dimen>
     <dimen name="spacing_huge_40">40dp</dimen>
     <dimen name="spacing_huge_48">48dp</dimen>
     <dimen name="spacing_large_56">56dp</dimen>
@@ -31,5 +32,9 @@
     <dimen name="button_height_32">32dp</dimen>
     <dimen name="button_height_normal_40">40dp</dimen>
     <dimen name="button_height_tall_60">60dp</dimen>
+
+    <dimen name="line_size">1dp</dimen>
+    <dimen name="size__very_big_288">288dp</dimen>
+    <dimen name="font_header">20sp</dimen>
 
 </resources>
