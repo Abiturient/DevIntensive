@@ -37,11 +37,11 @@ public class PreferencesManager {
     public List<String> loadUserProfileData() {
         List<String> userFields = new ArrayList<>();
 
-        userFields.add(mSharedPreferences.getString(ConstantManager.USER_PHONE_KEY, "null"));
-        userFields.add(mSharedPreferences.getString(ConstantManager.USER_MAIL_KEY, "null"));
-        userFields.add(mSharedPreferences.getString(ConstantManager.USER_VK_KEY, "null"));
-        userFields.add(mSharedPreferences.getString(ConstantManager.USER_GIT_KEY, "null"));
-        userFields.add(mSharedPreferences.getString(ConstantManager.USER_BIO_KEY, "null"));
+        userFields.add(mSharedPreferences.getString(ConstantManager.USER_PHONE_KEY, "+7(921)4401247"));
+        userFields.add(mSharedPreferences.getString(ConstantManager.USER_MAIL_KEY, "p.oblivion@yandex.ru"));
+        userFields.add(mSharedPreferences.getString(ConstantManager.USER_VK_KEY, "http://vk.com/id367577291"));
+        userFields.add(mSharedPreferences.getString(ConstantManager.USER_GIT_KEY, "https://github.com/Abiturient/DevIntensive"));
+        userFields.add(mSharedPreferences.getString(ConstantManager.USER_BIO_KEY, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."));
 
         return userFields;
     }

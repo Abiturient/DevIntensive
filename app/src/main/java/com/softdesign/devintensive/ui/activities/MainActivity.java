@@ -1,5 +1,6 @@
 package com.softdesign.devintensive.ui.activities;
 
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import com.softdesign.devintensive.Data.managers.DataManager;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.RoundedAvatar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private DrawerLayout mNavigationDrawer;
     private FloatingActionButton mFloatingActionButton;
     private EditText mUserPhone, mUserMail, mUserVk, mUserGit, mUserBio;
+    private ImageView mUserAvatar;
 
     private List<EditText> mUserInfo;
 
@@ -58,6 +61,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mUserVk = (EditText) findViewById(R.id.profile_vk_et);
         mUserGit = (EditText) findViewById(R.id.repository_et);
         mUserBio = (EditText) findViewById(R.id.about_me_et);
+
+        //mUserAvatar = (ImageView) findViewById(R.id.user_avatar);
+        //mUserAvatar.setImageBitmap(RoundedAvatar.getRoundedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ava)));
 
         mUserInfo   = new ArrayList<>();
         mUserInfo.add(mUserPhone);
