@@ -36,5 +36,7 @@
     <dimen name="line_size">1dp</dimen>
     <dimen name="size__very_big_288">288dp</dimen>
     <dimen name="font_header">20sp</dimen>
+    <dimen name="profile_image_size_256">256dp</dimen>
+    <dimen name="fab_right_space">16dp</dimen>
 
 </resources>
