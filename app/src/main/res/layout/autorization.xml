@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/auth_frame"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/grey_backgrond"
-    android:scaleType="centerCrop"
-    android:src="@drawable/auth_background">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/auth_frame_layout"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/grey_backgrond"
+             android:fitsSystemWindows="true"
+             tools:ignore="contentDescription">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/auth_background"
+        />
 
     <android.support.v7.widget.CardView
-        android:id="@+id/authorization_box"
-        android:layout_width="@dimen/auth_cardView_size_240"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:id="@+id/auth_box"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/corner_radius_2"
         app:cardElevation="@dimen/spacing_small_8"
-        app:cardPreventCornerOverlap="false">
+        app:cardPreventCornerOverlap="false"
+        android:layout_width="@dimen/auth_cardView_size_240"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,13 +50,13 @@
 
                 <com.devspark.robototextview.widget.RobotoTextView
                     android:id="@+id/auth_enter_textView"
+                    app:typeface="roboto_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/spacing_medial_24"
                     android:text="@string/header.authorization_enter"
                     android:textColor="@color/color_accent"
-                    android:textSize="@dimen/font_medium_20"
-                    app:typeface="roboto_medium"/>
+                    android:textSize="@dimen/font_medium_20"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -81,12 +87,12 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/spacing_medial_28"
                 android:layout_marginRight="@dimen/spacing_medial_28"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:layout_width="wrap_content">
+                android:orientation="vertical">
 
                 <!-- login -->
                 <LinearLayout
@@ -107,7 +113,7 @@
 
                 </LinearLayout>
 
-                <!-- Password -->
+                <!-- password -->
                 <LinearLayout style="@style/auth_info">
 
                     <android.support.design.widget.TextInputLayout
@@ -126,13 +132,13 @@
 
                 <!-- Button 'ENTER' -->
                 <com.devspark.robototextview.widget.RobotoButton
-                    android:id="@+id/auth_enter_button"
+                    android:id="@+id/auth_login_button"
                     style="@style/authorization_buttonEnter"
+                    app:typeface="roboto_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/size_normal_36"
                     android:onClick="submitAuthButton"
-                    android:text="@string/header.authorization_enter"
-                    app:typeface="roboto_medium"/>
+                    android:text="@string/header.authorization_enter"/>
 
                 <!-- Forgotten password -->
                 <TextView

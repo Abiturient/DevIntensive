@@ -65,6 +65,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private NavigationView mNavigationView;
     private ImageView mProfileImage;
 
+    private ImageView mToCall;
+    //private ImageView mToSendSms;
+    private ImageView mToSendEmail;
+    private ImageView mToViewVk;
+    private ImageView mToViewGit;
+
     private CoordinatorLayout mCoordinatorLayout;
     private DrawerLayout mNavigationDrawer;
     private RelativeLayout mProfilePlaceholder;
@@ -90,6 +96,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mDataManager = DataManager.getInstance();
 
         mCalling    = (ImageView) findViewById(R.id.call_img);
+
+        mToCall     = (ImageView) findViewById(R.id.to_call_img);
+        mToSendEmail= (ImageView) findViewById(R.id.to_email_img);
+        mToViewVk   = (ImageView) findViewById(R.id.to_vk_img);
+        mToViewVk   = (ImageView) findViewById(R.id.to_git_img);
+
 
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_container);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -118,6 +130,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mCalling.setOnClickListener(this);
         mFloatingActionButton.setOnClickListener(this);
         mProfilePlaceholder.setOnClickListener(this);
+
+        mToCall.setOnClickListener(this);
+        mToSendEmail.setOnClickListener(this);
+        mToViewVk.setOnClickListener(this);
+        mToViewGit.setOnClickListener(this);
 
         setupToolbar();
         setupDrawer();
@@ -205,6 +222,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
             case R.id.profile_placeholder:
                 showDialog(ConstantManager.LOAD_PROFILE_PHOTO);
+                break;
+
+            case R.id.to_call_img:
+                toCall(mUserPhone.getText().toString());
+                break;
+
+            case R.id.to_email_img:
+                toSendEmail(mUserMail.getText().toString());
+                break;
+
+            case R.id.to_vk_img:
+                toOpenWebPage(mUserVk.getText().toString());
+                break;
+            case R.id.to_git_img:
+                toOpenWebPage(mUserGit.getText().toString());
                 break;
         }
     }
@@ -500,4 +532,38 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Uri.parse("package:" + getPackageName()));
         startActivityForResult(appSettingsIntent, ConstantManager.PERMISSION_REQUEST_SETTINGS_CODE);
     }
+
+    private void toOpenWebPage(String url) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse(url.contains("http://") ? url : ("http://" + url)));
+        startActivity(browserIntent);
+    }
+
+    private void toSendEmail(String email) {
+        Intent sendEmailIntent = new Intent(Intent.ACTION_SEND);
+        sendEmailIntent.setType("text/plain");
+        sendEmailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {email});
+        sendEmailIntent.putExtra(Intent.EXTRA_SUBJECT, "Тема");
+        sendEmailIntent.putExtra(Intent.EXTRA_TEXT, "Тело");
+        startActivity(Intent.createChooser(sendEmailIntent, "Отправка"));
+    }
+
+    private void toCall(String phoneNumber) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            Intent dialIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" +
+                    additionalValidatingOfPhoneNumber(phoneNumber)));
+            startActivity(dialIntent);
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[] {Manifest.permission.CALL_PHONE},
+                    ConstantManager.CALL_PHONE_REQUEST_PERMISSIION_CODE);
+        }
+    }
+
+    private String additionalValidatingOfPhoneNumber(String phoneNum) {
+        return phoneNum.replace(" ", "")
+                       .replaceAll("\\(", "")
+                       .replaceAll("\\)", "");
+    }
+
 }

@@ -3,9 +3,11 @@ package com.softdesign.devintensive.Data.managers;
 import android.content.SharedPreferences;
 import android.net.Uri;
 
-import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.softdesign.devintensive.utils.DevintensiveApplication;
+
+import com.softdesign.devintensive.R;
+
 
 import java.net.URI;
 import java.util.ArrayList;

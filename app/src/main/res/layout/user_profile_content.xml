@@ -154,6 +154,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/to_call_img"
                     style="@style/icon.left"
                     android:src="@drawable/ic_call_black_24dp"
                     />
@@ -240,6 +241,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/to_email_img"
                     style="@style/icon.right"
                     android:src="@drawable/ic_phone_in_talk_black_24dp"
                     />
@@ -291,6 +293,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/to_vk_img"
                     style="@style/icon.right"
                     android:src="@drawable/ic_visibility_black_24dp"
                     />
@@ -343,6 +346,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/to_git_img"
                     style="@style/icon.right"
                     android:src="@drawable/ic_visibility_black_24dp"
                     />
