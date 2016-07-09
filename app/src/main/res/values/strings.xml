@@ -34,5 +34,18 @@
     <string name="user_profile_dialog.title">Изменить фотографию профиля</string>
     <string name="user_profile.choose.message">выберите фото</string>
 
+    <!-- auth -->
+    <string name="header.authorization_enter">ВОЙТИ</string>
+    <string name="hint.authorization_password">Пароль</string>
+    <string name="hint.authorization_forgotten_password">Забыли пароль?</string>
+    <string name="header.logout">Выйти</string>
+    <string name="header.options">Настройки</string>
+    <string name="error.editText_email">Введите существующий e-mail</string>
+    <string name="error.editText_vk">Формат ввода: vk.com/***</string>
+    <string name="error.editText_gitHub">Формат ввода: github.com/***</string>
+    <string name="error.editText_phone_wrong_symbols">Вводите только цифры</string>
+    <string name="error.editText_phone_wrong_length">Номер должен состоять из 11 цифр</string>
+    <string name="error.editText_phone_wrong_code">Номер должен начинаться с 7 или 8</string>
+
 </resources>
 
