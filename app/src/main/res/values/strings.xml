@@ -1,8 +1,38 @@
 <resources>
     <string name="app_name">Погребный Александр</string>
 
+    <!-- errors messages-->
     <string name="error.message.network">Network error</string>
     <string name="error.message.call">Call failed</string>
     <string name="error.message.map">Map loading failed</string>
 
+    <!-- user data -->
+    <string name="user_phone_number">+7(921)4401247</string>
+    <string name="user_email">p.oblivion@yandex.ru</string>
+    <string name="user_vk">http://vk.com/id367577291</string>
+    <string name="user_git">https://github.com/Abiturient/DevIntensive</string>
+    <string name="user_bio">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+
+    <!-- header -->
+    <string name="user_rate">Рейтинг</string>
+    <string name="user_rate_value">5</string>
+    <string name="user_strings">Написано строк кода</string>
+    <string name="user_string_value">25000</string>
+    <string name="user_projects">Проектов</string>
+    <string name="user_projects_value">5</string>
+
+    <!-- hints of edit text -->
+    <string name="string_mobile">Мобильный</string>
+    <string name="string_email">E-mail</string>
+    <string name="string_vk">Профиль в VK</string>
+    <string name="string_git">Репозиторий</string>
+    <string name="string_bio">О себе</string>
+    <string name="user_profile.placeholder.image">Изменить фотографию профиля</string>
+    <string name="user_profile_dialog.gallery">Загрузить из галерери</string>
+    <string name="user_profile_dialog.camera">Сделать снимок</string>
+    <string name="user_profile_dialog.cancel">Отмена</string>
+    <string name="user_profile_dialog.title">Изменить фотографию профиля</string>
+    <string name="user_profile.choose.message">выберите фото</string>
+
 </resources>
+

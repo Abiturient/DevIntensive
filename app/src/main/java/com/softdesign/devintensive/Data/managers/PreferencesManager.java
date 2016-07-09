@@ -1,10 +1,13 @@
 package com.softdesign.devintensive.Data.managers;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 
+import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.softdesign.devintensive.utils.DevintensiveApplication;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +19,10 @@ public class PreferencesManager {
     private SharedPreferences mSharedPreferences;
 
     private static final String[] USER_FIELDS = {ConstantManager.USER_PHONE_KEY,
-                                                    ConstantManager.USER_MAIL_KEY,
-                                                    ConstantManager.USER_VK_KEY,
-                                                    ConstantManager.USER_GIT_KEY,
-                                                    ConstantManager.USER_BIO_KEY
+            ConstantManager.USER_MAIL_KEY,
+            ConstantManager.USER_VK_KEY,
+            ConstantManager.USER_GIT_KEY,
+            ConstantManager.USER_BIO_KEY
     };
     public PreferencesManager() {
         this.mSharedPreferences = DevintensiveApplication.getSharedPreferences();
@@ -37,12 +40,30 @@ public class PreferencesManager {
     public List<String> loadUserProfileData() {
         List<String> userFields = new ArrayList<>();
 
-        userFields.add(mSharedPreferences.getString(ConstantManager.USER_PHONE_KEY, "+7(921)4401247"));
-        userFields.add(mSharedPreferences.getString(ConstantManager.USER_MAIL_KEY, "p.oblivion@yandex.ru"));
-        userFields.add(mSharedPreferences.getString(ConstantManager.USER_VK_KEY, "http://vk.com/id367577291"));
-        userFields.add(mSharedPreferences.getString(ConstantManager.USER_GIT_KEY, "https://github.com/Abiturient/DevIntensive"));
-        userFields.add(mSharedPreferences.getString(ConstantManager.USER_BIO_KEY, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."));
+        userFields.add(mSharedPreferences.getString(ConstantManager.USER_PHONE_KEY,
+                DevintensiveApplication.getContext().getResources().getString(R.string.user_phone_number)));
+        userFields.add(mSharedPreferences.getString(ConstantManager.USER_MAIL_KEY,
+                DevintensiveApplication.getContext().getResources().getString(R.string.user_email)));
+        userFields.add(mSharedPreferences.getString(ConstantManager.USER_VK_KEY,
+                DevintensiveApplication.getContext().getResources().getString(R.string.user_vk)));
+        userFields.add(mSharedPreferences.getString(ConstantManager.USER_GIT_KEY,
+                DevintensiveApplication.getContext().getResources().getString(R.string.user_git)));
+        userFields.add(mSharedPreferences.getString(ConstantManager.USER_BIO_KEY,
+                DevintensiveApplication.getContext().getResources().getString(R.string.user_bio)));
 
         return userFields;
     }
+
+    public void saveUserPhoto(Uri uri) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(ConstantManager.USER_PHOTO_KEY, uri.toString());
+
+        editor.apply();
+    }
+
+    public Uri loadUserPhoto() {
+        return Uri.parse(mSharedPreferences.getString(ConstantManager.USER_PHOTO_KEY,
+                "android.resource://com.softdesign.devintensive/drawable/userphoto"));
+    }
 }
+
