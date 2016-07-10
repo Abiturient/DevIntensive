@@ -21,6 +21,8 @@ public class UserInfoValidator implements TextWatcher {
     private static final int MAX_DIGITS     = 11;
     private static final int MAX_SYMBOLS    = 16;
 
+    CharSequence mHint = null;
+
     private int mTimerDuration = ConstantManager.ERROR_TIMER_LENGTH_NORMAL;
 
     private static final Handler ERROR_STOP_HANDLER = new Handler();
@@ -35,6 +37,7 @@ public class UserInfoValidator implements TextWatcher {
         this.mResources = editText.getContext().getResources();
         this.mEditText = editText;
         this.mTextInputLayout = textInputLayout;
+        this.mHint = mTextInputLayout.getHint();
     }
 
     @Override
@@ -73,9 +76,11 @@ public class UserInfoValidator implements TextWatcher {
      * @param errorType - error message
      */
     private void errorHandler(Boolean isError, final String errorType) {
+
         if (isError) {
             mTextInputLayout.setErrorEnabled(true);
-            mTextInputLayout.setError(errorType);
+            //mTextInputLayout.setError(errorType);
+            mTextInputLayout.setHint(mHint + ":" + errorType);
 
             ERROR_STOP_HANDLER.removeCallbacksAndMessages(null);
             ERROR_STOP_HANDLER.postDelayed(new Runnable() {
@@ -83,8 +88,11 @@ public class UserInfoValidator implements TextWatcher {
                 public void run() {
                     mTextInputLayout.setError(null);
                     mTextInputLayout.setErrorEnabled(false);
+                    mTextInputLayout.setHint(mHint);
                 }
             }, ERROR_TIMER_LENGTH);
+
+
         } else {
             mTextInputLayout.setError(null);
             mTextInputLayout.setErrorEnabled(false);
