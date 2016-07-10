@@ -20,6 +20,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -33,22 +34,24 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.softdesign.devintensive.utils.UserInfoValidator;
 import com.squareup.picasso.Picasso;
 
 import com.softdesign.devintensive.Data.managers.DataManager;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.utils.ConstantManager;
-import com.softdesign.devintensive.utils.RoundedAvatar;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -59,8 +62,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private DataManager mDataManager;
     private int mCurrentEditMode = 0;
 
-    private ImageView mCalling;
     private EditText mUserPhone, mUserMail, mUserVk, mUserGit, mUserBio;
+    private TextInputLayout mPhone_til, mEmail_til, mVk_til, mGit_til;
+
+    private ImageView mCalling;
     private ImageView mUserAvatar;
     private NavigationView mNavigationView;
     private ImageView mProfileImage;
@@ -86,6 +91,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private File mPhotoFile = null;
     private Uri mSelectedImage = null;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,21 +101,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         mDataManager = DataManager.getInstance();
 
-        mCalling    = (ImageView) findViewById(R.id.call_img);
+        mCalling = (ImageView) findViewById(R.id.call_img);
 
-        mToCall     = (ImageView) findViewById(R.id.to_call_img);
-        mToSendEmail= (ImageView) findViewById(R.id.to_email_img);
-        mToViewVk   = (ImageView) findViewById(R.id.to_vk_img);
-        mToViewVk   = (ImageView) findViewById(R.id.to_git_img);
+        mToCall = (ImageView) findViewById(R.id.to_call_img);
+        mToSendEmail = (ImageView) findViewById(R.id.to_email_img);
+        mToViewVk = (ImageView) findViewById(R.id.to_vk_img);
+        mToViewGit = (ImageView) findViewById(R.id.to_git_img);
 
 
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_container);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mNavigationDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer);
-        mFloatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
+        mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
         mProfilePlaceholder = (RelativeLayout) findViewById(R.id.profile_placeholder);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        mAppBarLayout  = (AppBarLayout) findViewById(R.id.appbar_layout);
+        mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
 
         mUserPhone = (EditText) findViewById(R.id.phone_et);
         mUserMail = (EditText) findViewById(R.id.email_et);
@@ -117,10 +123,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mUserGit = (EditText) findViewById(R.id.repository_et);
         mUserBio = (EditText) findViewById(R.id.about_me_et);
 
+        mPhone_til  = (TextInputLayout) findViewById(R.id.phone_til);
+        UserInfoValidator mUIV1= new UserInfoValidator(mUserPhone, mPhone_til);
+        mUserPhone.addTextChangedListener(mUIV1);
+
+        mEmail_til  = (TextInputLayout) findViewById(R.id.email_til);
+        UserInfoValidator mUIV2= new UserInfoValidator(mUserMail, mEmail_til);
+        mUserMail.addTextChangedListener(mUIV2);
+
+        mVk_til  = (TextInputLayout) findViewById(R.id.vk_til);
+        UserInfoValidator mUIV3= new UserInfoValidator(mUserVk, mVk_til);
+        mUserVk.addTextChangedListener(mUIV3);
+
+        mGit_til  = (TextInputLayout) findViewById(R.id.git_til);
+        UserInfoValidator mUIV4= new UserInfoValidator(mUserGit, mGit_til);
+        mUserGit.addTextChangedListener(mUIV4);
+
         mUserAvatar = (ImageView) findViewById(R.id.user_avatar);
         mProfileImage = (ImageView) findViewById(R.id.user_photo_img);
 
-        mUserInfo   = new ArrayList<>();
+        mUserInfo = new ArrayList<>();
         mUserInfo.add(mUserPhone);
         mUserInfo.add(mUserMail);
         mUserInfo.add(mUserVk);
@@ -144,7 +166,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 .placeholder(R.drawable.userphoto)  ////todo placeholder+transform+crop
                 .into(mProfileImage);
 
-        if (savedInstanceState ==null) {
+        if (savedInstanceState == null) {
 //            showSnackbar("активити запускается впервые");
 //            showToast("активити запускается впервые");
 
@@ -154,6 +176,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             mCurrentEditMode = savedInstanceState.getInt(ConstantManager.EDIT_MODE_KEY, 0);
             changeEditMode(mCurrentEditMode);
         }
+
     }
 
     @Override
@@ -209,6 +232,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 /*showProgress();
                 runWithDelay();*/
                 break;
+
             case R.id.fab:
                 if (mCurrentEditMode == 0) {
                     changeEditMode(1);
@@ -238,8 +262,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.to_git_img:
                 toOpenWebPage(mUserGit.getText().toString());
                 break;
+
         }
     }
+
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -320,11 +347,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-
     private void changeEditMode(int mode) {
-        if (mode == 1 ) {
+        if (mode == 1) {
             mFloatingActionButton.setImageResource(R.drawable.ic_check_black_24dp);
-            for (EditText  userValue : mUserInfo) {
+            for (EditText userValue : mUserInfo) {
                 userValue.setEnabled(true);
                 userValue.setFocusable(true);
                 userValue.setFocusableInTouchMode(true);
@@ -335,7 +361,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         } else {
             mFloatingActionButton.setImageResource(R.drawable.ic_edit_black_24dp);
-            for (EditText  userValue : mUserInfo) {
+            for (EditText userValue : mUserInfo) {
                 userValue.setEnabled(false);
                 userValue.setFocusable(false);
                 userValue.setFocusableInTouchMode(false);
@@ -353,7 +379,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void loadUserInfoValue() {
         List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
-        for (int i=0; i<userData.size(); i++) {
+        for (int i = 0; i < userData.size(); i++) {
             mUserInfo.get(i).setText(userData.get(i));
         }
 
@@ -412,7 +438,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivityForResult(takeCaptureIntent, ConstantManager.REQUEST_CAMERA_PICTURE);
             }
         } else {
-            ActivityCompat.requestPermissions(this, new String[] {
+            ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.CAMERA,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             }, ConstantManager.CAMERA_REQUEST_PERMISSION_CODE);
@@ -458,7 +484,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void unlockToolbar() {
-        mAppBarParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL| AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+        mAppBarParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
         mCollapsingToolbarLayout.setLayoutParams(mAppBarParams);
     }
 
@@ -469,7 +495,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 String[] selectItems = {getString(R.string.user_profile_dialog_gallery),
                         getString(R.string.user_profile_dialog_camera),
                         getString(R.string.user_profile_dialog_cancel)};
-                AlertDialog.Builder builder= new AlertDialog.Builder(this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.user_profile_dialog_title));
                 builder.setItems(selectItems, new DialogInterface.OnClickListener() {
                     @Override
@@ -497,13 +523,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 return builder.create();
 
             default:
-                return  null;
+                return null;
 
         }
     }
 
     private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
@@ -542,7 +568,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void toSendEmail(String email) {
         Intent sendEmailIntent = new Intent(Intent.ACTION_SEND);
         sendEmailIntent.setType("text/plain");
-        sendEmailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {email});
+        sendEmailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
         sendEmailIntent.putExtra(Intent.EXTRA_SUBJECT, "Тема");
         sendEmailIntent.putExtra(Intent.EXTRA_TEXT, "Тело");
         startActivity(Intent.createChooser(sendEmailIntent, "Отправка"));
@@ -555,15 +581,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             startActivity(dialIntent);
         } else {
             ActivityCompat.requestPermissions(this,
-                    new String[] {Manifest.permission.CALL_PHONE},
+                    new String[]{Manifest.permission.CALL_PHONE},
                     ConstantManager.CALL_PHONE_REQUEST_PERMISSIION_CODE);
         }
     }
 
     private String additionalValidatingOfPhoneNumber(String phoneNum) {
         return phoneNum.replace(" ", "")
-                       .replaceAll("\\(", "")
-                       .replaceAll("\\)", "");
+                .replaceAll("\\(", "")
+                .replaceAll("\\)", "");
     }
 
 }
