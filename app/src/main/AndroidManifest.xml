@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.softdesign.devintensive">
 
+    <permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera2" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera2.autofocus" android:required="false"/>
+
+    <permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
     <application
         android:name=".utils.DevintensiveApplication"
         android:allowBackup="true"
@@ -16,6 +24,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.activities.AuthActivity">
+        </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
     </application>
 
 </manifest>

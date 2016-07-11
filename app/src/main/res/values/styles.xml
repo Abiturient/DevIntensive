@@ -12,11 +12,13 @@
         <item name="android:layout_width">@dimen/size_small_24</item>
         <item name="android:layout_height">@dimen/size_small_24</item>
     </style>
+
     <style name="icon.left" parent="icon">
         <item name="android:layout_gravity">top|left</item>
         <item name="android:layout_marginTop">@dimen/spacing_medial_24</item>
         <item name="android:layout_marginLeft">@dimen/spacing_normal_16</item>
     </style>
+
     <style name="icon.right" parent="icon">
         <item name="android:layout_gravity">top|right</item>
         <item name="android:layout_marginTop">@dimen/spacing_medial_24</item>
@@ -35,5 +37,44 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+
+    <!-- Auth -->
+    <style name="auth_info">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/size_medium_48</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:layout_marginTop">@dimen/spacing_small_8</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_medial_28</item>
+        <item name="android:layout_marginRight">@dimen/spacing_medial_28</item>
+    </style>
+
+    <style name="auth_editText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textColorHint">@color/grey_light</item>
+        <item name="android:textSize">@dimen/font_normal_14</item>
+    </style>
+
+    <style name="auth_ForgotPass">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textColor">@color/grey_light</item>
+        <item name="android:layout_marginTop">@dimen/spacing_small_8</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+
+    <style name="authorization_buttonEnter" parent="Base.Widget.AppCompat.Button">
+        <item name="colorButtonNormal">@color/color_accent</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/rounded_angles</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginBottom">@dimen/spacing_small_8</item>
+        <item name="android:layout_marginTop">@dimen/spacing_medial_28</item>
+        <item name="android:paddingLeft">@dimen/spacing_huge_40</item>
+        <item name="android:paddingRight">@dimen/spacing_huge_40</item>
+    </style>
 
 </resources>

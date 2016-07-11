@@ -1,18 +1,23 @@
 <resources>
+
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-
     <!-- sizes -->
     <dimen name="size_small_24">24dp</dimen>
+    <dimen name="size_normal_36">36dp</dimen>
+    <dimen name="size_medium_48">48dp</dimen>
     <dimen name="size_medium_56">56dp</dimen>
     <dimen name="size_big_72">72dp</dimen>
+    <dimen name="size_big_88">88dp</dimen>
 
     <!-- font sizes-->
     <dimen name="font_small_12">12sp</dimen>
+    <dimen name="font_normal_14">14sp</dimen>
     <dimen name="font_normal_15">15sp</dimen>
     <dimen name="font_large_18">18sp</dimen>
+    <dimen name="font_medium_20">20sp</dimen>
     <dimen name="font_larger_22">22sp</dimen>
 
     <!-- typical spacing between two views -->
@@ -38,5 +43,12 @@
     <dimen name="font_header">20sp</dimen>
     <dimen name="profile_image_size_256">256dp</dimen>
     <dimen name="fab_right_space">16dp</dimen>
+    <dimen name="placeholder_photo_size_90">90dp</dimen>
+
+    <!-- Corner radius -->
+    <dimen name="corner_radius_2">2dp</dimen>
+    <dimen name="spacing_medial_28">28dp</dimen>
+    <dimen name="auth_cardView_size_240">240dp</dimen>
+    <dimen name="size_big_80">80dp</dimen>
 
 </resources>
