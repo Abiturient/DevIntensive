@@ -39,6 +39,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 
+
     <!-- Auth -->
     <style name="auth_info">
         <item name="android:layout_width">match_parent</item>
@@ -66,7 +67,7 @@
     </style>
 
 
-    <style name="authorization_buttonEnter" parent="Base.Widget.AppCompat.Button">
+    <style name="auth_buttonEnter" parent="Base.Widget.AppCompat.Button">
         <item name="colorButtonNormal">@color/color_accent</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/rounded_angles</item>

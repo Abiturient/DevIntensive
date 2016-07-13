@@ -34,10 +34,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.softdesign.devintensive.Data.network.ServiceGenerator;
+import com.softdesign.devintensive.Data.network.UploadPhoto;
 
 import com.softdesign.devintensive.utils.UserInfoValidator;
 import com.squareup.picasso.Picasso;
@@ -54,6 +57,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -64,6 +75,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText mUserPhone, mUserMail, mUserVk, mUserGit, mUserBio;
     private TextInputLayout mPhone_til, mEmail_til, mVk_til, mGit_til;
+
+    private TextView mUserValuesRating, mUserValuesCodeLines, mUserValuesProjects;
+    private List<TextView> mUserValueViews;
 
     private ImageView mCalling;
     private ImageView mUserAvatar;
@@ -123,6 +137,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mUserGit = (EditText) findViewById(R.id.repository_et);
         mUserBio = (EditText) findViewById(R.id.about_me_et);
 
+        mUserValuesRating = (TextView) findViewById(R.id.rating_tv);
+        mUserValuesCodeLines = (TextView) findViewById(R.id.codelines_tv);
+        mUserValuesProjects = (TextView) findViewById(R.id.projects_tv);
+
+
         mPhone_til  = (TextInputLayout) findViewById(R.id.phone_til);
         UserInfoValidator mUIV1= new UserInfoValidator(mUserPhone, mPhone_til);
         mUserPhone.addTextChangedListener(mUIV1);
@@ -149,6 +168,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mUserInfo.add(mUserGit);
         mUserInfo.add(mUserBio);
 
+        mUserValueViews = new ArrayList<>();
+        mUserValueViews.add(mUserValuesRating);
+        mUserValueViews.add(mUserValuesCodeLines);
+        mUserValueViews.add(mUserValuesProjects);
+
         mCalling.setOnClickListener(this);
         mFloatingActionButton.setOnClickListener(this);
         mProfilePlaceholder.setOnClickListener(this);
@@ -161,6 +185,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setupToolbar();
         setupDrawer();
         loadUserInfoValue();
+        loadUserInfoValues();
         Picasso.with(this)
                 .load(mDataManager.getPreferencesManager().loadUserPhoto())
                 .placeholder(R.drawable.userphoto)  ////todo placeholder+transform+crop
@@ -394,6 +419,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mDataManager.getPreferencesManager().saveUserProfileData(userData);
     }
 
+    private void loadUserInfoValues() {
+        List<String> userData = mDataManager.getPreferencesManager().loadUserProfileValues();
+        for (int i = 0; i < userData.size(); i++) {
+            mUserValueViews.get(i).setText(userData.get(i));
+        }
+
+    }
+
     public void setupRoundedAvatar() {
         //mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         if (mNavigationDrawer != null) {
@@ -436,6 +469,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //send file to intent
                 takeCaptureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
                 startActivityForResult(takeCaptureIntent, ConstantManager.REQUEST_CAMERA_PICTURE);
+
+                uploadPhoto(mPhotoFile.toURI());
             }
         } else {
             ActivityCompat.requestPermissions(this, new String[]{
@@ -590,6 +625,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return phoneNum.replace(" ", "")
                 .replaceAll("\\(", "")
                 .replaceAll("\\)", "");
+    }
+
+    private void uploadPhoto(URI uri) {
+        // create upload service client
+        UploadPhoto service = ServiceGenerator.createService(UploadPhoto.class);
+        // https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
+        // use the FileUtils to get the actual file by uri
+        File file = new File(uri);
+        // create RequestBody instance from file
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        // MultipartBody.Part is used to send also the actual file name
+        MultipartBody.Part body = MultipartBody.Part.createFormData("picture", file.getName(), requestFile);
+        // add another part within the multipart request
+        String descriptionString = "hello, this is description speaking";
+        RequestBody description = RequestBody.create(MediaType.parse("multipart/form-data"), descriptionString);
+        // finally, execute the request
+        Call<ResponseBody> call = service.upload(description, body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.v("Upload", "success");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("Upload error:", t.getMessage());
+            }
+        });
     }
 
 }

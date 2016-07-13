@@ -42,6 +42,7 @@
     <dimen name="size__very_big_288">288dp</dimen>
     <dimen name="font_header">20sp</dimen>
     <dimen name="profile_image_size_256">256dp</dimen>
+    <dimen name="user_info_size_112">112dp</dimen>
     <dimen name="fab_right_space">16dp</dimen>
     <dimen name="placeholder_photo_size_90">90dp</dimen>
 
