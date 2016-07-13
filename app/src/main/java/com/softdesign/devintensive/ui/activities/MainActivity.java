@@ -39,6 +39,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.softdesign.devintensive.Data.network.ServiceGenerator;
+import com.softdesign.devintensive.Data.network.UploadPhoto;
+
 import com.softdesign.devintensive.utils.UserInfoValidator;
 import com.squareup.picasso.Picasso;
 
@@ -53,6 +56,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
@@ -458,6 +469,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //send file to intent
                 takeCaptureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
                 startActivityForResult(takeCaptureIntent, ConstantManager.REQUEST_CAMERA_PICTURE);
+
+                uploadPhoto(mPhotoFile.toURI());
             }
         } else {
             ActivityCompat.requestPermissions(this, new String[]{
@@ -612,6 +625,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return phoneNum.replace(" ", "")
                 .replaceAll("\\(", "")
                 .replaceAll("\\)", "");
+    }
+
+    private void uploadPhoto(URI uri) {
+        // create upload service client
+        UploadPhoto service = ServiceGenerator.createService(UploadPhoto.class);
+        // https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
+        // use the FileUtils to get the actual file by uri
+        File file = new File(uri);
+        // create RequestBody instance from file
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        // MultipartBody.Part is used to send also the actual file name
+        MultipartBody.Part body = MultipartBody.Part.createFormData("picture", file.getName(), requestFile);
+        // add another part within the multipart request
+        String descriptionString = "hello, this is description speaking";
+        RequestBody description = RequestBody.create(MediaType.parse("multipart/form-data"), descriptionString);
+        // finally, execute the request
+        Call<ResponseBody> call = service.upload(description, body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.v("Upload", "success");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("Upload error:", t.getMessage());
+            }
+        });
     }
 
 }
