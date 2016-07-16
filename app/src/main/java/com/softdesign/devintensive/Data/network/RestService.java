@@ -33,7 +33,7 @@ public interface RestService {
                                        @Part MultipartBody.Part photo);
 
     @GET("user/{userId}")
-    Call<UserModelRes.User> authUserByToken(@Path("userId") String userId);
+    Call<UserModelRes> authUserByToken(@Path("userId") String userId);
 
 
     @GET("user/list?orderBy=rating")

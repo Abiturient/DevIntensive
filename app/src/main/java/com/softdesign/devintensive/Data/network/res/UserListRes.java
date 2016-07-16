@@ -1,6 +1,5 @@
 package com.softdesign.devintensive.Data.network.res;
 
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -45,7 +44,7 @@ public class UserListRes {
         private UserModelRes.ProfileValues profileValues;
         @SerializedName("publicInfo")
         @Expose
-        private UserModelRes.PublicInfo publicInfo;
+        private UserModelRes.publicInfo publicInfo;
         @SerializedName("specialization")
         @Expose
         private String specialization;
@@ -61,12 +60,12 @@ public class UserListRes {
             return profileValues;
         }
 
-        public UserModelRes.PublicInfo getPublicInfo() {
+        public UserModelRes.publicInfo getPublicInfo() {
             return publicInfo;
         }
 
         public String getFullName() {
-            return firstName + " " +  secondName;
+            return firstName + " " +   secondName;
         }
     }
 

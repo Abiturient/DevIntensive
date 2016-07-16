@@ -1,10 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <!-- NestedScrollView with UserDataModelResponse Info inside -->
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior=".ui.behaviors.CustomNestedScrollViewBehavior">
+
+        <include layout="@layout/user_info"/>
+
+    </android.support.v4.widget.NestedScrollView>
 
     <!-- AppBar -->
     <android.support.design.widget.AppBarLayout
@@ -58,20 +68,11 @@
         app:behavior_min_height="@dimen/size_medium_56"
         app:layout_behavior=".ui.behaviors.UserRatingBehavior">
 
-        <include layout="@layout/user_info"/>
+        <include layout="@layout/user_list_content"/>
 
     </LinearLayout>
 
 
-    <!-- NestedScrollView with UserDataModelResponse Info inside -->
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior=".ui.behaviors.CustomNestedScrollViewBehavior">
 
-        <include layout="@layout/static_user_content"/>
-
-    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

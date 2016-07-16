@@ -50,7 +50,7 @@ public class DataManager {
         return mRestService.loginUser(userLoginReq);
     }
 
-    public Call<UserModelRes.User> authByToken(){
+    public Call<UserModelRes> authByToken(){
         return mRestService.authUserByToken(mPreferencesManager.getUserId());
     }
 

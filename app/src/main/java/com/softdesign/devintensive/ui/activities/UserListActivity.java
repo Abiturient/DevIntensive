@@ -1,8 +1,5 @@
 package com.softdesign.devintensive.ui.activities;
 
-
-import android.support.design.widget.CoordinatorLayout;
-
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,6 +19,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.Data.managers.DataManager;
@@ -30,6 +29,8 @@ import com.softdesign.devintensive.Data.storage.models.UserDTO;
 import com.softdesign.devintensive.ui.adapters.UsersAdapter;
 import com.softdesign.devintensive.ui.fragments.RetainedFragment;
 import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.RoundImageTransformation;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,8 @@ import retrofit2.Response;
 public class UserListActivity extends BaseActivity implements SearchView.OnQueryTextListener {
 
     private static final String TAG = ConstantManager.TAG_PREFIX + "UserListActivity";
+    private static final String FRAGMENT_TAG = "UserData";
+
 
     @BindView(R.id.main_coordinator)
     CoordinatorLayout mCoordinatorLayout;
@@ -63,6 +66,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
+
         ButterKnife.bind(this);
         setTitle("Команда");
 
@@ -76,12 +80,12 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         setupDrawer();
 
         FragmentManager fragmentManager = getFragmentManager();
-        dataFragment = (RetainedFragment) fragmentManager.findFragmentByTag("mData");
+        dataFragment = (RetainedFragment) fragmentManager.findFragmentByTag(FRAGMENT_TAG);
 
 
         if (dataFragment == null) {
             dataFragment = new RetainedFragment();
-            fragmentManager.beginTransaction().add(dataFragment, "mData").commit();
+            fragmentManager.beginTransaction().add(dataFragment, FRAGMENT_TAG).commit();
             loadUsers();
         } else {
             mUsers = dataFragment.getData();
@@ -138,22 +142,27 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     private void setupDrawer() {
         final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         if (navigationView != null) {
+            TextView textViewEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_email_text);
+            TextView textViewName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_name_text);
+            textViewEmail.setText(mDataManager.getPreferencesManager().loadUserProfileData().get(1));
+            String name = mDataManager.getPreferencesManager().loadUserName();
+            textViewName.setText(name);
+            this.setTitle(name);
+            setupMenuAvatar(mDataManager.getPreferencesManager().loadUserPhoto());
             navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.options:
-                            startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                    Uri.parse("package:" + getPackageName())));
+                            startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:"
+                                    + getPackageName())));
                             break;
                         case R.id.logout:
                             mDataManager.getPreferencesManager().saveAuthToken("");
-                            startActivity(new Intent(getApplicationContext(),
-                                    AuthActivity.class));
+                            startActivity(new Intent(getApplicationContext(), AuthActivity.class));
                             break;
                         case R.id.user_profile_menu:
-                            startActivity(new Intent(getApplicationContext(),
-                                    AuthActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             break;
                         case R.id.team_menu:
                             if (mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
@@ -166,6 +175,19 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                     return false;
                 }
             });
+        }
+    }
+
+    private void setupMenuAvatar(Uri image) {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        if (navigationView != null) {
+            ImageView mRoundedAvatar_img = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.user_avatar);
+            Picasso.with(this)
+                    .load(image)
+                    .resize(getResources().getDimensionPixelSize(R.dimen.profile_image_size_256),
+                            getResources().getDimensionPixelSize(R.dimen.profile_image_size_256))
+                    .transform(new RoundImageTransformation())
+                    .into(mRoundedAvatar_img);
         }
     }
 

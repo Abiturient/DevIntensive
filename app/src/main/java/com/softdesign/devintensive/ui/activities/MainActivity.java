@@ -206,10 +206,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
+        /*if (item.getItemId() == android.R.id.home) {
             mNavigationDrawer.openDrawer(GravityCompat.START);
         }
         return super.onOptionsItemSelected(item);
+        */
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mNavigationDrawer.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.logout:
+                logout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
     @Override
@@ -340,8 +352,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(MenuItem item) {
-                    showSnackbar(item.getTitle().toString());
+                    /*showSnackbar(item.getTitle().toString());
                     item.setChecked(true);
+                    mNavigationDrawer.closeDrawer(GravityCompat.START);*/
+                    switch (item.getItemId()) {
+                        case R.id.options:
+                            startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName())));
+                            break;
+                        case R.id.logout:
+                            logout();
+                            break;
+                        default:
+                            showSnackbar(item.getTitle().toString());
+                            item.setChecked(true);
+                            break;
+                    }
                     mNavigationDrawer.closeDrawer(GravityCompat.START);
                     return false;
                 }
@@ -367,6 +392,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                     insertProfileImage(mSelectedImage);
                 }
+                break;
+
+            case R.id.logout:
+                logout();
+                break;
+
+            case R.id.team_menu:
+                startActivity(new Intent(getApplicationContext(), UserListActivity.class));
                 break;
         }
     }
@@ -654,6 +687,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Log.e("Upload error:", t.getMessage());
             }
         });*/
+    }
+
+    private void logout() {
+        mDataManager.getPreferencesManager().saveAuthToken("");
+        startActivity(new Intent(this, AuthActivity.class));
     }
 
 }

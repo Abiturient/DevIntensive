@@ -27,7 +27,7 @@ public class UserDTO implements Parcelable {
 
         mPhoto = userData.getPublicInfo().getPhoto();
         mFullName = userData.getFullName();
-        mRating = String.valueOf(userData.getProfileValues().getRating());
+        mRating = String.valueOf(userData.getProfileValues().getRaiting());
         mCodeLines = String.valueOf(userData.getProfileValues().getLinesCode());
         mProjects = String.valueOf(userData.getProfileValues().getProjects());
         mAbout = userData.getPublicInfo().getBio();

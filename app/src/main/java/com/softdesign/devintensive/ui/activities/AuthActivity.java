@@ -57,22 +57,22 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         mButtonAuth.setOnClickListener(this);
 
         if (NetworkStatusChecker.isNetworkAvailable(this)) {
-            Call<UserModelRes.User> call = mDataManager.authByToken();
-            call.enqueue(new Callback<UserModelRes.User>() {
+            Call<UserModelRes> call = mDataManager.authByToken();
+            call.enqueue(new Callback<UserModelRes>() {
                 @Override
-                public void onResponse(Call<UserModelRes.User> call, Response<UserModelRes.User> response) {
+                public void onResponse(Call<UserModelRes> call, Response<UserModelRes> response) {
                     switch (response.code()){
                         case 200:
                             authUserByToken(response.body());
                             break;
                         case 401:
-                            showSnackBar("Токен скончался");
+                            showSnackBar("Время истекло: токен");
                             break;
                     }
                 }
 
                 @Override
-                public void onFailure(Call<UserModelRes.User> call, Throwable t) {
+                public void onFailure(Call<UserModelRes> call, Throwable t) {
 
                 }
             });
@@ -114,10 +114,12 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         mDataManager.getPreferencesManager().saveAuthToken(userModel.getData().getToken());
         mDataManager.getPreferencesManager().saveUserId(userModel.getData().getUser().getId());
 
-        saveUserValues(userModel.getData().getUser());
+        saveUserValues(userModel.getData());
 
         Intent loginIntent = new Intent(this, MainActivity.class);
+        //Intent loginIntent = new Intent(this, UserListActivity.class);
         startActivity(loginIntent);
+
     }
 
     private void signIn() {
@@ -147,27 +149,27 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void saveUserValues(UserModelRes.User userModel) {
+    private void saveUserValues(UserModelRes.Data userModel) {
         int[] userValues = {
-                userModel.getProfileValues().getRating(),
+                userModel.getProfileValues().getRaiting(),
                 userModel.getProfileValues().getLinesCode(),
                 userModel.getProfileValues().getProjects()
         };
         mDataManager.getPreferencesManager().saveUserProfileValues(userValues);
     }
 
-    private void authUserByToken(UserModelRes.User userModel) {
-        showSnackBar("Вход по токену");
+    private void authUserByToken(UserModelRes userModel) {
+        showSnackBar("Валидация по токену");
 
-        saveUserValues(userModel);
-        saveUserData(userModel);
-        saveUserPhotos(userModel);
+        saveUserValues(userModel.getData());
+        saveUserData(userModel.getData());
+        saveUserPhotos(userModel.getData());
 
         Intent loginIntent = new Intent(this, MainActivity.class);
         startActivity(loginIntent);
     }
 
-    private void saveUserData(UserModelRes.User userModel) {
+    private void saveUserData(UserModelRes.Data userModel) {
         List<String> userData = new ArrayList<>();
 
         userData.add(userModel.getContacts().getPhone());
@@ -180,12 +182,12 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         saveUserName(userModel);
     }
 
-    private void saveUserPhotos(UserModelRes.User userModel){
+    private void saveUserPhotos(UserModelRes.Data userModel){
         mDataManager.getPreferencesManager().saveUserPhoto(Uri.parse(userModel.getPublicInfo().getPhoto()));
         mDataManager.getPreferencesManager().saveUserAvatar(Uri.parse(userModel.getPublicInfo().getAvatar()));
     }
 
-    private void saveUserName(UserModelRes.User userModel){
+    private void saveUserName(UserModelRes.Data userModel){
         List<String> userName = new ArrayList<>();
         userName.add(userModel.getFirstName());
         userName.add(userModel.getSecondName());

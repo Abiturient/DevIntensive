@@ -70,7 +70,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             holder.mUserPhoto.setImageResource(R.drawable.userphoto);
         }
         holder.mFullName.setText(user.getFullName());
-        holder.mRating.setText(String.valueOf(user.getProfileValues().getRating()));
+        holder.mRating.setText(String.valueOf(user.getProfileValues().getRaiting()));
         holder.mCodeLines.setText(String.valueOf(user.getProfileValues().getLinesCode()));
         holder.mProjects.setText(String.valueOf(user.getProfileValues().getProjects()));
 
