@@ -10,4 +10,18 @@
           android:icon="@drawable/ic_people_black_24dp"
           android:title="Команда"/>
 </group>
+
+    <item android:title="@string/toolbar_settings">
+        <menu>
+            <item
+                android:id="@+id/options"
+                android:icon="@drawable/ic_build_black_24dp"
+                android:title="@string/toolbar_settings" />
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/ic_cancel_black_24dp"
+                android:title="@string/toolbar_logout" />
+        </menu>
+    </item>
+
 </menu>

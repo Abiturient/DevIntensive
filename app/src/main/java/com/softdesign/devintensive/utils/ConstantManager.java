@@ -42,4 +42,8 @@ public interface ConstantManager {
     String USER_SECOND_NAME_KEY = "USER_SECOND_NAME_KEY";
     String USER_FIRST_NAME_KEY = "USER_FIRST_NAME_KEY";
 
+    String PARCELABLE_KEY = "PARCELABLE_KEY";
+
+    String USER_AVATAR_KEY = "USER_AVATAR_KEY";
+
 }

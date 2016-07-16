@@ -134,5 +134,14 @@ public class PreferencesManager {
     public String getUserId() {
         return mSharedPreferences.getString(ConstantManager.USER_ID_KEY, "null");
     }
+
+    public void saveUserAvatar(Uri uri) {
+        if (uri != null) {
+            SharedPreferences.Editor editor = mSharedPreferences.edit();
+
+            editor.putString(ConstantManager.USER_AVATAR_KEY, uri.toString());
+            editor.apply();
+        }
+    }
 }
 

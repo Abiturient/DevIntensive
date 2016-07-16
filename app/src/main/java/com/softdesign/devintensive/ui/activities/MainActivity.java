@@ -628,6 +628,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void uploadPhoto(URI uri) {
+        /*
         // create upload service client
         UploadPhoto service = ServiceGenerator.createService(UploadPhoto.class);
         // https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
@@ -652,7 +653,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e("Upload error:", t.getMessage());
             }
-        });
+        });*/
     }
 
 }

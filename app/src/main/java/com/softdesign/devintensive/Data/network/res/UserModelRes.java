@@ -23,6 +23,7 @@ public class UserModelRes {
         return data;
     }
 
+
     public class Contacts {
 
         @SerializedName("vk")
@@ -60,12 +61,36 @@ public class UserModelRes {
         @Expose
         private String token;
 
+        @SerializedName("contacts")
+        @Expose
+        private Contacts contacts;
+
+        @SerializedName("repositories")
+        @Expose
+        private Repositories repositories;
+
+        @SerializedName("publicInfo")
+        @Expose
+        private PublicInfo publicInfo;
+
         public String getToken() {
             return token;
         }
 
         public User getUser() {
             return user;
+        }
+
+        public Contacts getContacts() {
+            return contacts;
+        }
+
+        public Repositories getRepositories() {
+            return repositories;
+        }
+
+        public PublicInfo getPublicInfo() {
+            return publicInfo;
         }
     }
 
@@ -220,7 +245,9 @@ public class UserModelRes {
         public String getFirstName() {
             return firstName;
         }
-        public PublicInfo getPublicInfo() {
+
+        //public PublicInfo getPublicInfo() {
+        public UserModelRes.PublicInfo getPublicInfo() {
             return publicInfo;
         }
 

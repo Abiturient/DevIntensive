@@ -48,5 +48,14 @@
     <string name="header.logout">Выйти</string>
     <string name="header.options">Настройки</string>
 
+    <!-- font families -->
+    <string name="ff_medium">sans-serif-medium</string>
+    <string name="ff_regular">sans-serif</string>
+
+    <!-- toolbar -->
+    <string name="toolbar_search">Поиск</string>
+    <string name="toolbar_logout">Выйти</string>
+    <string name="toolbar_settings">Настройки</string>
+
 </resources>
 
