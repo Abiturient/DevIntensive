@@ -323,7 +323,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (mNavigationView != null && mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
             mNavigationDrawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //super.onBackPressed();
         }
     }
 

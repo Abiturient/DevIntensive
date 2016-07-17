@@ -65,6 +65,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     private Toolbar mToolbar;
     private DrawerLayout mNavigationDrawer;
     private RecyclerView mRecyclerView;
+    private NavigationView mNavigationView;
 
     private DataManager mDataManager;
     private UsersAdapter mUserAdapter;
@@ -139,6 +140,15 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         dataFragment.setData(mUsers);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mNavigationView != null && mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
+            mNavigationDrawer.closeDrawer(GravityCompat.START);
+        } else {
+            //super.onBackPressed();
+        }
+    }
+
     private List<UserListRes.UserData> loadUsers() {
         Call<UserListRes> call = mDataManager.getUserList();
 
@@ -187,20 +197,20 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
     private void setupDrawer() {
 
-        final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        if (navigationView != null) {
+        mNavigationView = (NavigationView) findViewById(R.id.navigation_view_list);
+        if (mNavigationView != null) {
 
             TextView textViewEmail = (TextView)
-                    navigationView.getHeaderView(0).findViewById(R.id.user_email_text);
+                    mNavigationView.getHeaderView(0).findViewById(R.id.user_email_text);
             TextView textViewName = (TextView)
-                    navigationView.getHeaderView(0).findViewById(R.id.user_name_text);
+                    mNavigationView.getHeaderView(0).findViewById(R.id.user_name_text);
             textViewEmail.setText(mDataManager.getPreferencesManager().loadUserProfileData().get(1));
             String name = mDataManager.getPreferencesManager().loadUserName();
             textViewName.setText(name);
             this.setTitle(name);
             setupMenuAvatar(mDataManager.getPreferencesManager().loadUserPhoto());
 
-            navigationView.setNavigationItemSelectedListener(
+            mNavigationView.setNavigationItemSelectedListener(
                     new NavigationView.OnNavigationItemSelectedListener() {
                         @Override
                         public boolean onNavigationItemSelected(MenuItem item) {
@@ -213,10 +223,12 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                                 case R.id.logout:
                                     mDataManager.getPreferencesManager().saveAuthToken("");
                                     startActivity(new Intent(getApplicationContext(), AuthActivity.class));
+
                                     break;
 
                                 case R.id.user_profile_menu:
                                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    mNavigationDrawer.closeDrawer(GravityCompat.START);
                                     break;
 
                                 case R.id.team_menu:
@@ -224,6 +236,7 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                                         mNavigationDrawer.closeDrawer(GravityCompat.START);
                                     }
                                     break;
+
                                 default:
                                     break;
                             }
@@ -275,17 +288,17 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        /*if (item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == android.R.id.home) {
             mNavigationDrawer.openDrawer(GravityCompat.START);
         }
-        return super.onOptionsItemSelected(item);*/
+        return super.onOptionsItemSelected(item);
 
-        switch (item.getItemId()) {
+        /*switch (item.getItemId()) {
             case android.R.id.home:
                 mCallback.openNavDrawer();
                 return true;
         }
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);*/
 
         /*switch (item.getItemId()) {
             case R.id.user_profile_menu:

@@ -82,6 +82,11 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public void onBackPressed() {
+        //super.onBackPressed();
+        this.finish();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -110,7 +115,7 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void authSuccess(UserModelRes userModel) {
-        showSnackBar(userModel.getData().getToken());
+        //showSnackBar(userModel.getData().getToken());
         mDataManager.getPreferencesManager().saveAuthToken(userModel.getData().getToken());
         mDataManager.getPreferencesManager().saveUserId(userModel.getData().getUser().getId());
 
@@ -150,11 +155,24 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void saveUserValues(UserModelRes.Data userModel) {
-        int[] userValues = {
-                userModel.getProfileValues().getRaiting(),
-                userModel.getProfileValues().getLinesCode(),
-                userModel.getProfileValues().getProjects()
+
+        boolean test = false;
+        int a = 0, b = 0, c = 0;
+
+        try {
+            a = userModel.getUser().getProfileValues().getRaiting();
+            b = userModel.getUser().getProfileValues().getLinesCode();
+            c = userModel.getUser().getProfileValues().getProjects();
+
+        } catch (Exception e) {
+            test = true;
+            a = userModel.getProfileValues().getRaiting();
+            b = userModel.getProfileValues().getLinesCode();
+            c = userModel.getProfileValues().getProjects();
         };
+
+        int[] userValues = { a, b, c };
+
         mDataManager.getPreferencesManager().saveUserProfileValues(userValues);
     }
 
