@@ -1,6 +1,8 @@
 package com.softdesign.devintensive.ui.activities;
 
 import android.app.FragmentManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
@@ -12,6 +14,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -32,6 +35,8 @@ import com.softdesign.devintensive.utils.ConstantManager;
 import com.softdesign.devintensive.utils.RoundImageTransformation;
 import com.squareup.picasso.Picasso;
 
+import com.softdesign.devintensive.utils.ActivityCallback;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,14 +52,19 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     private static final String FRAGMENT_TAG = "UserData";
 
 
-    @BindView(R.id.main_coordinator)
+    /*@BindView(R.id.main_coordinator_list)
     CoordinatorLayout mCoordinatorLayout;
-    @BindView(R.id.toolbar)
+    @BindView(R.id.toolbar_list)
     Toolbar mToolbar;
-    @BindView(R.id.navigation_drawer)
+    @BindView(R.id.navigation_drawer_list)
     DrawerLayout mNavigationDrawer;
-    @BindView(R.id.user_list)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.user_list_list)
+    RecyclerView mRecyclerView;*/
+
+    private CoordinatorLayout mCoordinatorLayout;
+    private Toolbar mToolbar;
+    private DrawerLayout mNavigationDrawer;
+    private RecyclerView mRecyclerView;
 
     private DataManager mDataManager;
     private UsersAdapter mUserAdapter;
@@ -62,22 +72,35 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
     private RetainedFragment dataFragment;
 
+    private ActivityCallback mCallback;
+    private Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
 
-        ButterKnife.bind(this);
+        //ButterKnife.bind(this);
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_list);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_list);
+        mNavigationDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer_list);
+        mRecyclerView = (RecyclerView) findViewById(R.id.user_list_list);
+
+        mContext    = mCoordinatorLayout.getContext();
+
         setTitle("Команда");
 
         showProgress();
 
         mDataManager = DataManager.getInstance();
-        LinearLayoutManager gridLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(gridLayoutManager);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        //GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
 
         setupToolbar();
         setupDrawer();
+        //loadUsers();
 
         FragmentManager fragmentManager = getFragmentManager();
         dataFragment = (RetainedFragment) fragmentManager.findFragmentByTag(FRAGMENT_TAG);
@@ -94,17 +117,18 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     }
 
     private void onDataLoaded() {
-        mUserAdapter = new UsersAdapter(mUsers, new UsersAdapter.UserViewHolder.CustomClickListener() {
-            @Override
-            public void onUserItemClickListener(int position) {
-                UserDTO userDTO = new UserDTO(mUserAdapter.getUser(position));
+        mUserAdapter = new UsersAdapter(mUsers,
+                new UsersAdapter.UserViewHolder.CustomClickListener() {
+                    @Override
+                    public void onUserItemClickListener(int position) {
+                        UserDTO userDTO = new UserDTO(mUserAdapter.getUser(position));
 
-                Intent profileIntent = new Intent(UserListActivity.this, ProfileUserActivity.class);
-                profileIntent.putExtra(ConstantManager.PARCELABLE_KEY, userDTO);
+                        Intent profileIntent = new Intent(UserListActivity.this, ProfileUserActivity.class);
+                        profileIntent.putExtra(ConstantManager.PARCELABLE_KEY, userDTO);
 
-                startActivity(profileIntent);
-            }
-        });
+                        startActivity(profileIntent);
+                    }
+                });
         mRecyclerView.setAdapter(mUserAdapter);
         hideProgress();
     }
@@ -125,10 +149,32 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
                     mUsers = response.body().getData();
                     dataFragment.setData(mUsers);
                     onDataLoaded();
+
                 } catch (NullPointerException e) {
                     Log.e(TAG, e.toString());
-                    showSnackbar("Что то пошло не так");
+                    showSnackbar("Что-то пошло не так");
                 }
+                /*if (response.code() == 200) {
+                    mUsers = (ArrayList<UserListRes.UserData>) response.body().getData();
+                    mUserAdapter = new UsersAdapter(mUsers,
+                            new UsersAdapter.UserViewHolder.CustomClickListener() {
+                                @Override
+                                public void onUserItemClickListener(int position) {
+                                    UserDTO userDTO=new UserDTO(mUsers.get(position));
+                                    Intent profileIntent=
+                                            new Intent(UserListActivity.this,
+                                                    ProfileUserActivity.class);
+                                    profileIntent.putExtra(ConstantManager.PARCELABLE_KEY,
+                                            userDTO);
+                                    startActivity(profileIntent);
+                                }
+                            });
+                    mRecyclerView.setAdapter(mUserAdapter);
+                } else if (response.code() == 404) {
+                    showSnackbar("Неверный логин или пароль");
+                } else {
+                    showSnackbar("Ошибка..");
+                }*/
             }
 
             @Override
@@ -140,48 +186,58 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
     }
 
     private void setupDrawer() {
+
         final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         if (navigationView != null) {
-            TextView textViewEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_email_text);
-            TextView textViewName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_name_text);
+
+            TextView textViewEmail = (TextView)
+                    navigationView.getHeaderView(0).findViewById(R.id.user_email_text);
+            TextView textViewName = (TextView)
+                    navigationView.getHeaderView(0).findViewById(R.id.user_name_text);
             textViewEmail.setText(mDataManager.getPreferencesManager().loadUserProfileData().get(1));
             String name = mDataManager.getPreferencesManager().loadUserName();
             textViewName.setText(name);
             this.setTitle(name);
             setupMenuAvatar(mDataManager.getPreferencesManager().loadUserPhoto());
-            navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.options:
-                            startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:"
-                                    + getPackageName())));
-                            break;
-                        case R.id.logout:
-                            mDataManager.getPreferencesManager().saveAuthToken("");
-                            startActivity(new Intent(getApplicationContext(), AuthActivity.class));
-                            break;
-                        case R.id.user_profile_menu:
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            break;
-                        case R.id.team_menu:
-                            if (mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
-                                mNavigationDrawer.closeDrawer(GravityCompat.START);
+
+            navigationView.setNavigationItemSelectedListener(
+                    new NavigationView.OnNavigationItemSelectedListener() {
+                        @Override
+                        public boolean onNavigationItemSelected(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.options:
+                                    startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                            Uri.parse("package:" + getPackageName())));
+                                    break;
+
+                                case R.id.logout:
+                                    mDataManager.getPreferencesManager().saveAuthToken("");
+                                    startActivity(new Intent(getApplicationContext(), AuthActivity.class));
+                                    break;
+
+                                case R.id.user_profile_menu:
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    break;
+
+                                case R.id.team_menu:
+                                    if (mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
+                                        mNavigationDrawer.closeDrawer(GravityCompat.START);
+                                    }
+                                    break;
+                                default:
+                                    break;
                             }
-                            break;
-                        default:
-                            break;
-                    }
-                    return false;
-                }
-            });
+                            return false;
+                        }
+                    });
         }
     }
 
     private void setupMenuAvatar(Uri image) {
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         if (navigationView != null) {
-            ImageView mRoundedAvatar_img = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.user_avatar);
+            ImageView mRoundedAvatar_img = (ImageView)
+                    navigationView.getHeaderView(0).findViewById(R.id.user_avatar);
             Picasso.with(this)
                     .load(image)
                     .resize(getResources().getDimensionPixelSize(R.dimen.profile_image_size_256),
@@ -219,11 +275,46 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
+        /*if (item.getItemId() == android.R.id.home) {
             mNavigationDrawer.openDrawer(GravityCompat.START);
         }
+        return super.onOptionsItemSelected(item);*/
 
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mCallback.openNavDrawer();
+                return true;
+        }
         return super.onOptionsItemSelected(item);
+
+        /*switch (item.getItemId()) {
+            case R.id.user_profile_menu:
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                return true;
+
+            case R.id.options:
+                startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("package:" + getPackageName())));
+                break;
+
+            case R.id.logout:
+                logout();
+                return true;
+
+            case R.id.team_menu:
+                if (mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
+                    mNavigationDrawer.closeDrawer(GravityCompat.START);
+                }
+                break;
+
+            case android.R.id.home:
+                mNavigationDrawer.openDrawer(GravityCompat.START);
+                return super.onOptionsItemSelected(item);
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }*/
+
     }
 
     @Override
@@ -243,4 +334,11 @@ public class UserListActivity extends BaseActivity implements SearchView.OnQuery
         mUserAdapter.notifyDataSetChanged();
         return true;
     }
+
+    private void logout() {
+        mDataManager.getPreferencesManager().saveAuthToken("");
+        startActivity(new Intent(this, AuthActivity.class));
+    }
+
+
 }

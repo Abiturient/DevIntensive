@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -31,30 +32,48 @@ import butterknife.ButterKnife;
  */
 public class ProfileUserActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar)
+    /*@BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.user_photo_img)
     ImageView mProfileImage;
     @BindView(R.id.about_et)
     EditText mUserAbout;
-    @BindView(R.id.rating_txt)
+    @BindView(R.id.rating_txt_item)
     TextView mUserRating;
-    @BindView(R.id.code_lines_txt)
+    @BindView(R.id.code_lines_txt_item)
     TextView mUserCodeLines;
-    @BindView(R.id.project_count_txt)
+    @BindView(R.id.project_count_txt_item)
     TextView mUserProjects;
     @BindView(R.id.repositories_list)
     ListView mRepoListView;
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
     @BindView(R.id.main_coordinator)
-    CoordinatorLayout mCoordinatorLayout;
+    CoordinatorLayout mCoordinatorLayout;*/
+
+    private Toolbar mToolbar;
+    private TextView mUserRating, mUserCodeLines, mUserProjects, mUserAbout;
+    private ImageView mProfileImage;
+    private ListView mRepoListView;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private CoordinatorLayout mCoordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_user);
-        ButterKnife.bind(this);
+        //ButterKnife.bind(this);
+
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_container);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mProfileImage = (ImageView) findViewById(R.id.user_photo_img);
+        mUserRating = (TextView) findViewById(R.id.rating_tv);
+        mUserCodeLines = (TextView) findViewById(R.id.codelines_tv);
+        mUserProjects = (TextView) findViewById(R.id.projects_tv);
+        mUserAbout = (TextView) findViewById(R.id.bio_tv);
+        mRepoListView = (ListView) findViewById(R.id.repositories_list);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         setupToolbar();
         initProfileData();
@@ -100,6 +119,8 @@ public class ProfileUserActivity extends AppCompatActivity {
                 .into(mProfileImage);
 
     }
+
+
 }
 
 

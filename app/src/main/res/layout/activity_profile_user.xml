@@ -1,78 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_coordinator"
+    android:id="@+id/main_coordinator_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- NestedScrollView with UserDataModelResponse Info inside -->
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior=".ui.behaviors.CustomNestedScrollViewBehavior">
-
-        <include layout="@layout/user_info"/>
-
-    </android.support.v4.widget.NestedScrollView>
-
-    <!-- AppBar -->
+    <!--AppBar Layout -->
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar_layout"
+        style="@style/AppTheme.AppBarOverlay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        >
+        android:background="@color/color_primary"
+        android:fitsSystemWindows="true">
+
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            app:contentScrim="@color/grey"
+            app:theme="@style/ToolbarStyle"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:contentScrim="@color/color_primary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <!-- Photo -->
+
             <ImageView
                 android:id="@+id/user_photo_img"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/profile_image_size_256"
-                android:background="@color/grey_backgrond"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/userphoto"/>
+                android:src="@drawable/header_bg"/>
 
-            <!-- Toolbar -->
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
+                style="@style/AppTheme.PopupOverlay"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_marginTop="@dimen/toolbar_offset"
-                android:popupTheme="@style/AppTheme.PopupOverlay"
-                android:theme="@style/ToolbarStyle"
-                app:layout_collapseMode="pin"/>
+                app:layout_collapseMode="pin"
+                app:titleTextColor="@color/white"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <!-- ScoreBox -->
-    <LinearLayout
-        android:id="@+id/user_rating_wrapper"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/user_info_size_112"
-        android:background="@color/grey"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:behavior_min_height="@dimen/size_medium_56"
-        app:layout_behavior=".ui.behaviors.UserRatingBehavior">
-
-        <include layout="@layout/user_list_content"/>
-
-    </LinearLayout>
-
-
-
+    <include layout="@layout/static_user_content"/>
 
 </android.support.design.widget.CoordinatorLayout>

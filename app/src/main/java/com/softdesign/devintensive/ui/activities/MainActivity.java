@@ -215,12 +215,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case android.R.id.home:
                 mNavigationDrawer.openDrawer(GravityCompat.START);
                 return true;
+
             case R.id.logout:
                 logout();
                 return true;
+
+            case R.id.team_menu:
+                startActivity(new Intent(getApplicationContext(), UserListActivity.class));
+                break;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
+        return false;
 
     }
 
@@ -349,7 +356,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         if (mNavigationDrawer != null) {
-            mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            mNavigationView.setNavigationItemSelectedListener(
+                    new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(MenuItem item) {
                     /*showSnackbar(item.getTitle().toString());
@@ -359,12 +367,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         case R.id.options:
                             startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName())));
                             break;
+
                         case R.id.logout:
                             logout();
                             break;
+
                         default:
                             showSnackbar(item.getTitle().toString());
                             item.setChecked(true);
+                            break;
+
+                        case R.id.team_menu:
+                            startActivity(new Intent(getApplicationContext(), UserListActivity.class));
                             break;
                     }
                     mNavigationDrawer.closeDrawer(GravityCompat.START);

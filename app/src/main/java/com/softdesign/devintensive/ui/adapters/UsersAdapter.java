@@ -42,12 +42,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     @Override
     public UsersAdapter.UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext = parent.getContext();
-        View contentView = LayoutInflater.from(mContext).inflate(R.layout.item_user_list, parent, false);
+        View contentView = LayoutInflater.from(mContext).inflate(R.layout.item_user_list,
+                parent, false);
         return new UserViewHolder(contentView, mCustomClickListener);
     }
 
 
-    public UsersAdapter(List<UserListRes.UserData> users, UserViewHolder.CustomClickListener customClickListener) {
+    public UsersAdapter(List<UserListRes.UserData> users,
+                        UserViewHolder.CustomClickListener customClickListener) {
         mUsers = users;
         this.mCustomClickListener = customClickListener;
     }
@@ -62,8 +64,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             Picasso.with(mContext)
                     .load(user.getPublicInfo().getPhoto())
                     .resize(width,height)
-                    .placeholder(mContext.getResources().getDrawable(R.drawable.userphoto))
-                    .error(mContext.getResources().getDrawable(R.drawable.userphoto))
+                    .placeholder(mContext.getResources().getDrawable(R.drawable.header_bg))
+                    .error(mContext.getResources().getDrawable(R.drawable.header_bg))
                     .into(holder.mUserPhoto);
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "Не загружена картинку !");
@@ -89,20 +91,23 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
     public static class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.user_photo_img)
+        /*@BindView(R.id.user_photo_img_item)
         AspectRatioImageView mUserPhoto;
-        @BindView(R.id.user_full_name_txt)
+        @BindView(R.id.user_full_name_txt_item)
         TextView mFullName;
-        @BindView(R.id.rating_txt)
+        @BindView(R.id.rating_txt_item)
         TextView mRating;
-        @BindView(R.id.code_lines_txt)
+        @BindView(R.id.code_lines_txt_item)
         TextView mCodeLines;
-        @BindView(R.id.project_count_txt)
+        @BindView(R.id.project_count_txt_item)
         TextView mProjects;
-        @BindView(R.id.about_txt)
+        @BindView(R.id.about_txt_item)
         TextView mAbout;
         @BindView(R.id.more_info_btn)
-        Button mShowMore;
+        Button mShowMore;*/
+        protected TextView mFullName, mRating, mCodeLines, mProjects, mAbout;
+        protected Button mShowMore;
+        protected AspectRatioImageView mUserPhoto;
 
         private CustomClickListener mListener;
 
@@ -115,9 +120,18 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
         public UserViewHolder(View itemView, CustomClickListener customClickListener) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            //ButterKnife.bind(this, itemView);
 
             this.mListener = customClickListener;
+
+            mUserPhoto = (AspectRatioImageView) itemView.findViewById(R.id.user_photo_img_item);
+            mFullName = (TextView) itemView.findViewById(R.id.user_full_name_txt_item);
+            mRating = (TextView) itemView.findViewById(R.id.rating_txt_item);
+            mCodeLines = (TextView) itemView.findViewById(R.id.code_lines_txt_item);
+            mProjects = (TextView) itemView.findViewById(R.id.project_count_txt_item);
+            mAbout = (TextView) itemView.findViewById(R.id.about_txt_item);
+            mShowMore =(Button)itemView.findViewById(R.id.more_info_btn);
+            mShowMore.setOnClickListener(this);
 
             mShowMore.setOnClickListener(this);
         }
