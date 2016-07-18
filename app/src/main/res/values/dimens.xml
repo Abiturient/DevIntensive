@@ -52,4 +52,7 @@
     <dimen name="auth_cardView_size_240">240dp</dimen>
     <dimen name="size_big_80">80dp</dimen>
 
+    <!-- toolbar -->
+    <dimen name="toolbar_offset">0dp</dimen>
+
 </resources>

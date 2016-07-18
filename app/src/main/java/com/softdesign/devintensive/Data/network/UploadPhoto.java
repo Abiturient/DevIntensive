@@ -12,8 +12,8 @@ import retrofit2.http.Part;
  */
 public class UploadPhoto {
 
-    @POST("upload")
+    /*@POST("upload")
     Call<ResponseBody> upload(@Part("description") RequestBody description,
-                              @Part MultipartBody.Part file);
+                              @Part MultipartBody.Part file);*/
 
 }

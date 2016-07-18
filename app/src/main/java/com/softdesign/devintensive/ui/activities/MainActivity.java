@@ -206,10 +206,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
+        /*if (item.getItemId() == android.R.id.home) {
             mNavigationDrawer.openDrawer(GravityCompat.START);
         }
         return super.onOptionsItemSelected(item);
+        */
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mNavigationDrawer.openDrawer(GravityCompat.START);
+                return true;
+
+            case R.id.logout:
+                logout();
+                return true;
+
+            case R.id.team_menu:
+                startActivity(new Intent(getApplicationContext(), UserListActivity.class));
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return false;
+
     }
 
     @Override
@@ -304,7 +323,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (mNavigationView != null && mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
             mNavigationDrawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //super.onBackPressed();
         }
     }
 
@@ -337,11 +356,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         if (mNavigationDrawer != null) {
-            mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            mNavigationView.setNavigationItemSelectedListener(
+                    new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(MenuItem item) {
-                    showSnackbar(item.getTitle().toString());
+                    /*showSnackbar(item.getTitle().toString());
                     item.setChecked(true);
+                    mNavigationDrawer.closeDrawer(GravityCompat.START);*/
+                    switch (item.getItemId()) {
+                        case R.id.options:
+                            startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName())));
+                            break;
+
+                        case R.id.logout:
+                            logout();
+                            break;
+
+                        default:
+                            showSnackbar(item.getTitle().toString());
+                            item.setChecked(true);
+                            break;
+
+                        case R.id.team_menu:
+                            startActivity(new Intent(getApplicationContext(), UserListActivity.class));
+                            break;
+                    }
                     mNavigationDrawer.closeDrawer(GravityCompat.START);
                     return false;
                 }
@@ -367,6 +406,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                     insertProfileImage(mSelectedImage);
                 }
+                break;
+
+            case R.id.logout:
+                logout();
+                break;
+
+            case R.id.team_menu:
+                startActivity(new Intent(getApplicationContext(), UserListActivity.class));
                 break;
         }
     }
@@ -628,6 +675,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void uploadPhoto(URI uri) {
+        /*
         // create upload service client
         UploadPhoto service = ServiceGenerator.createService(UploadPhoto.class);
         // https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
@@ -652,7 +700,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e("Upload error:", t.getMessage());
             }
-        });
+        });*/
+    }
+
+    private void logout() {
+        mDataManager.getPreferencesManager().saveAuthToken("");
+        startActivity(new Intent(this, AuthActivity.class));
     }
 
 }

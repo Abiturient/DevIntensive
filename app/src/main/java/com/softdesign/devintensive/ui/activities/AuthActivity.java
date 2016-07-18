@@ -17,6 +17,9 @@ import com.softdesign.devintensive.Data.network.res.UserModelRes;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.utils.NetworkStatusChecker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,6 +55,36 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
 
         mRememberPassword.setOnClickListener(this);
         mButtonAuth.setOnClickListener(this);
+
+        if (NetworkStatusChecker.isNetworkAvailable(this)) {
+            Call<UserModelRes> call = mDataManager.authByToken();
+            call.enqueue(new Callback<UserModelRes>() {
+                @Override
+                public void onResponse(Call<UserModelRes> call, Response<UserModelRes> response) {
+                    switch (response.code()){
+                        case 200:
+                            authUserByToken(response.body());
+                            break;
+                        case 401:
+                            showSnackBar("Время истекло: токен");
+                            break;
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserModelRes> call, Throwable t) {
+
+                }
+            });
+        } else {
+            showSnackBar("Сеть на данный момент не дотсупна, попробуйте позже");
+        }
+
+    }
+
+    public void onBackPressed() {
+        //super.onBackPressed();
+        this.finish();
     }
 
     @Override
@@ -82,14 +115,16 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void authSuccess(UserModelRes userModel) {
-        showSnackBar(userModel.getData().getToken());
+        //showSnackBar(userModel.getData().getToken());
         mDataManager.getPreferencesManager().saveAuthToken(userModel.getData().getToken());
         mDataManager.getPreferencesManager().saveUserId(userModel.getData().getUser().getId());
 
-        saveUserValues(userModel);
+        saveUserValues(userModel.getData());
 
         Intent loginIntent = new Intent(this, MainActivity.class);
+        //Intent loginIntent = new Intent(this, UserListActivity.class);
         startActivity(loginIntent);
+
     }
 
     private void signIn() {
@@ -119,12 +154,64 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void saveUserValues(UserModelRes userModel) {
-        int[] userValues = {
-                userModel.getData().getUser().getProfileValues().getRating(),
-                userModel.getData().getUser().getProfileValues().getLinesCode(),
-                userModel.getData().getUser().getProfileValues().getProjects()
+    private void saveUserValues(UserModelRes.Data userModel) {
+
+        boolean test = false;
+        int a = 0, b = 0, c = 0;
+
+        try {
+            a = userModel.getUser().getProfileValues().getRaiting();
+            b = userModel.getUser().getProfileValues().getLinesCode();
+            c = userModel.getUser().getProfileValues().getProjects();
+
+        } catch (Exception e) {
+            test = true;
+            a = userModel.getProfileValues().getRaiting();
+            b = userModel.getProfileValues().getLinesCode();
+            c = userModel.getProfileValues().getProjects();
         };
+
+        int[] userValues = { a, b, c };
+
         mDataManager.getPreferencesManager().saveUserProfileValues(userValues);
     }
+
+    private void authUserByToken(UserModelRes userModel) {
+        showSnackBar("Валидация по токену");
+
+        saveUserValues(userModel.getData());
+        saveUserData(userModel.getData());
+        saveUserPhotos(userModel.getData());
+
+        Intent loginIntent = new Intent(this, MainActivity.class);
+        startActivity(loginIntent);
+    }
+
+    private void saveUserData(UserModelRes.Data userModel) {
+        List<String> userData = new ArrayList<>();
+
+        userData.add(userModel.getContacts().getPhone());
+        userData.add(userModel.getContacts().getEmail());
+        userData.add(userModel.getContacts().getVk());
+        userData.add(userModel.getRepositories().getRepo().get(0).getGit());
+        userData.add(userModel.getPublicInfo().getBio());
+
+        mDataManager.getPreferencesManager().saveUserProfileData(userData);
+        saveUserName(userModel);
+    }
+
+    private void saveUserPhotos(UserModelRes.Data userModel){
+        mDataManager.getPreferencesManager().saveUserPhoto(Uri.parse(userModel.getPublicInfo().getPhoto()));
+        mDataManager.getPreferencesManager().saveUserAvatar(Uri.parse(userModel.getPublicInfo().getAvatar()));
+    }
+
+    private void saveUserName(UserModelRes.Data userModel){
+        List<String> userName = new ArrayList<>();
+        userName.add(userModel.getFirstName());
+        userName.add(userModel.getSecondName());
+
+        mDataManager.getPreferencesManager().saveUserName(userName);
+    }
+
+
 }
