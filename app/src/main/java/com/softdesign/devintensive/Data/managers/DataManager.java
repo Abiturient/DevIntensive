@@ -2,12 +2,14 @@ package com.softdesign.devintensive.Data.managers;
 
 import android.content.Context;
 
+import com.softdesign.devintensive.Data.network.PicassoCache;
 import com.softdesign.devintensive.Data.network.RestService;
 import com.softdesign.devintensive.Data.network.ServiceGenerator;
 import com.softdesign.devintensive.Data.network.req.UserLoginReq;
 import com.softdesign.devintensive.Data.network.res.UserListRes;
 import com.softdesign.devintensive.Data.network.res.UserModelRes;
 import com.softdesign.devintensive.utils.DevintensiveApplication;
+import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
 
@@ -20,6 +22,9 @@ public class DataManager {
     private PreferencesManager mPreferencesManager;
     private Context mContext;
 
+    private Picasso mPicasso;
+    //private DaoSession mDaoSession;
+
     private RestService mRestService;
 
     public DataManager() {
@@ -27,6 +32,9 @@ public class DataManager {
         this.mPreferencesManager = new PreferencesManager();
         this.mContext = DevintensiveApplication.getContext();
         this.mRestService = ServiceGenerator.createService(RestService.class);
+
+        this.mPicasso = new PicassoCache(mContext).getPicassoInstance();
+
 
     }
 
@@ -43,6 +51,10 @@ public class DataManager {
 
     public Context getContext() {
         return mContext;
+    }
+
+    public Picasso getPicasso() {
+        return mPicasso;
     }
 
     //region ============ Network ================

@@ -84,7 +84,9 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onBackPressed() {
         //super.onBackPressed();
-        this.finish();
+        //if (mDataManager.getPreferencesManager().getAuthToken().equals("")) {
+        //    this.finish();
+        //}
     }
 
     @Override
