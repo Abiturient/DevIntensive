@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.softdesign.devintensive.Data.managers.DataManager;
 import com.softdesign.devintensive.Data.network.res.UserListRes;
 import com.softdesign.devintensive.Data.network.res.UserModelRes;
+import com.softdesign.devintensive.Data.storage.models.User;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.ui.views.AspectRatioImageView;
 import com.softdesign.devintensive.utils.ConstantManager;
@@ -33,14 +34,21 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     private static final String TAG = ConstantManager.TAG_PREFIX + "UserAdapter";
 
     private Context mContext;
-    private List<UserListRes.UserData> mUsers;
+
+    //private List<UserListRes.UserData> mUsers;
+    private List<User> mUsers;
+
     private UserViewHolder.CustomClickListener mCustomClickListener;
 
-    public UserListRes.UserData getUser(int id){
+    //public UserListRes.UserData getUser(int id){
+    public User getUser(int id){
+
+        //return mUsers.get(id);
         return mUsers.get(id);
     }
 
-    public void setUsers(List<UserListRes.UserData> users) {
+    //public void setUsers(List<UserListRes.UserData> users) {
+    public void setUsers(List<User> users) {
         mUsers = users;
     }
 
@@ -53,7 +61,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     }
 
 
-    public UsersAdapter(List<UserListRes.UserData> users,
+    //public UsersAdapter(List<UserListRes.UserData> users,
+    public UsersAdapter(List<User> users,
                         UserViewHolder.CustomClickListener customClickListener) {
         mUsers = users;
         this.mCustomClickListener = customClickListener;
@@ -63,13 +72,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     public void onBindViewHolder(final UsersAdapter.UserViewHolder holder, int position) {
         //assert position <= getItemCount();
 
-        final UserListRes.UserData user = mUsers.get(position);
+        //final UserListRes.UserData user = mUsers.get(position);
+        final User user = mUsers.get(position);
         final String userPhoto;
-        if (user.getPublicInfo().getPhoto().isEmpty()) {
+        if (user.getPhoto().isEmpty()) {
             userPhoto = "null";
             Log.e(TAG, "onBindViewHolder: user with name " + user.getFullName() + " has not photo");
         } else {
-            userPhoto = user.getPublicInfo().getPhoto();
+            userPhoto = user.getPhoto();
         }
 
         DataManager.getInstance().getPicasso()
@@ -121,15 +131,15 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             holder.mUserPhoto.setImageResource(R.drawable.userphoto);
         }*/
         holder.mFullName.setText(user.getFullName());
-        holder.mRating.setText(String.valueOf(user.getProfileValues().getRaiting()));
-        holder.mCodeLines.setText(String.valueOf(user.getProfileValues().getLinesCode()));
-        holder.mProjects.setText(String.valueOf(user.getProfileValues().getProjects()));
+        holder.mRating.setText(String.valueOf(user.getRating()));
+        holder.mCodeLines.setText(String.valueOf(user.getCodeLines()));
+        holder.mProjects.setText(String.valueOf(user.getProjects()));
 
-        if (user.getPublicInfo().getBio() == null || user.getPublicInfo().getBio().isEmpty()) {
+        if (user.getBio() == null || user.getBio().isEmpty()) {
             holder.mAbout.setVisibility(View.GONE);
         } else {
             holder.mAbout.setVisibility(View.VISIBLE);
-            holder.mAbout.setText(user.getPublicInfo().getBio());
+            holder.mAbout.setText(user.getBio());
         }
     }
 

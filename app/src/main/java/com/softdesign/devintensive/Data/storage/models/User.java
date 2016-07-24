@@ -1,5 +1,7 @@
 package com.softdesign.devintensive.Data.storage.models;
 
+import com.softdesign.devintensive.Data.network.res.UserListRes;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.JoinProperty;
@@ -47,6 +49,17 @@ public class User {
             @JoinProperty(name = "remoteId", referencedName = "userRemoteId")
     })
     private List<Repository> repositories;
+
+    public User(UserListRes.UserData userRes) {
+        this.remoteId = userRes.getId();
+        this.photo = userRes.getPublicInfo().getPhoto();
+        this.fullName = userRes.getFullName();
+        this.searchName = userRes.getFullName().toUpperCase();
+        this.rating = userRes.getProfileValues().getRaiting();
+        this.codeLines = userRes.getProfileValues().getLinesCode();
+        this.projects = userRes.getProfileValues().getProjects();
+        this.bio = userRes.getPublicInfo().getBio();
+    }
 
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.

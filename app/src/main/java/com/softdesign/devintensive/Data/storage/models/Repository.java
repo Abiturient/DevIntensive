@@ -1,5 +1,7 @@
 package com.softdesign.devintensive.Data.storage.models;
 
+import com.softdesign.devintensive.Data.network.res.UserModelRes;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
@@ -24,6 +26,12 @@ public class Repository {
     private String repositoryName;
 
     private String userRemoteId;
+
+    public Repository(UserModelRes.Repo repositoryRes, String userID) {
+        this.repositoryName = repositoryRes.getGit();
+        this.userRemoteId = userID;
+        this.remoteId = repositoryRes.getId();
+    }
 
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.

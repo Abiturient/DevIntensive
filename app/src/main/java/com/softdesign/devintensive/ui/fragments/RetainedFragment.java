@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 
 import com.softdesign.devintensive.Data.network.res.UserListRes;
+import com.softdesign.devintensive.Data.storage.models.User;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public class RetainedFragment extends Fragment {
 
     private List<UserListRes.UserData> mData;
+    private List<User> mDataDb;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,4 +30,13 @@ public class RetainedFragment extends Fragment {
     public void setData(List<UserListRes.UserData> data) {
         mData = data;
     }
+
+    public void setDataToDb(List<User> data) {
+        mDataDb = data;
+    }
+
+    public List<User> getDataFromDb() {
+        return mDataDb;
+    }
+
 }

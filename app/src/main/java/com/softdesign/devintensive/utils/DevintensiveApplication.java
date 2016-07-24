@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.content.Context;
 
+import com.facebook.stetho.Stetho;
 import com.softdesign.devintensive.Data.storage.models.DaoMaster;
 import com.softdesign.devintensive.Data.storage.models.DaoSession;
 
@@ -32,6 +33,8 @@ public class DevintensiveApplication extends Application {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "devintensive-db");
         Database db = helper.getWritableDb();
         sDaoSession = new DaoMaster(db).newSession();
+
+        Stetho.initializeWithDefaults(this);
 
     }
 

@@ -22,7 +22,7 @@ public class UserDTO implements Parcelable {
     private String mAbout;
     private List<String> mRepositories;
 
-    public UserDTO(UserListRes.UserData userData) {
+    /*public UserDTO(UserListRes.UserData userData) {
         List<String> repoLink = new ArrayList<>();
 
         mPhoto = userData.getPublicInfo().getPhoto();
@@ -37,7 +37,24 @@ public class UserDTO implements Parcelable {
         }
 
         mRepositories = repoLink;
+    }*/
+    public UserDTO(User userData) {
+        List<String> repoLink = new ArrayList<>();
+
+        mPhoto = userData.getPhoto();
+        mFullName = userData.getFullName();
+        mRating = String.valueOf(userData.getRating());
+        mCodeLines = String.valueOf(userData.getCodeLines());
+        mProjects = String.valueOf(userData.getProjects());
+        mAbout = userData.getBio();
+
+        for (Repository gitLink : userData.getRepositories()) {
+            repoLink.add(gitLink.getRepositoryName());
+        }
+
+        mRepositories = repoLink;
     }
+
 
     protected UserDTO(Parcel in) {
         mPhoto = in.readString();
