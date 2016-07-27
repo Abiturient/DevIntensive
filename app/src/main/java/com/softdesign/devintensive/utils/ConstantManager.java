@@ -46,4 +46,5 @@ public interface ConstantManager {
 
     String USER_AVATAR_KEY = "USER_AVATAR_KEY";
 
+    int SEARCH_DELAY = 1500;
 }

@@ -10,4 +10,5 @@
         android:title="@string/toolbar_search"
         app:showAsAction="collapseActionView|ifRoom"
         app:actionViewClass="android.support.v7.widget.SearchView"/>
+    <!-- support.v7. -->
 </menu>
